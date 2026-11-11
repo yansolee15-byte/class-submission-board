@@ -14,7 +14,7 @@ function render(){
  if(!ready)return;
  if(location.hash==='#admin'){renderAdmin();return;}
  const active=data.items.filter(i=>!i.archived);
- $('#app').innerHTML=`<section class="intro"><div><p class="eyebrow">OUR CLASS · CHECK BOARD</p><h1>오늘도 하나씩, 차근차근.</h1><p class="muted">제출한 항목을 누르고 내 번호를 찾아 체크해요.</p></div><div class="summary">우리 반 <strong>${data.students.length}</strong>명 <span aria-hidden="true">·</span> 제출 항목 <strong>${active.length}</strong>개</div></section><div class="toolbar"><h2>우리 반 제출 현황</h2>${legend()}</div><section class="cards">${active.map(card).join('')||'<div class="panel empty">아직 제출 항목이 없어요.<br>선생님이 항목을 등록하면 여기에 나타나요.</div>'}</section><p class="help">① 항목 선택 &nbsp; → &nbsp; ② 내 번호 체크 &nbsp; → &nbsp; ③ 완료 · 저장하기</p>`;
+ $('#app').innerHTML=`<section class="intro"><div><h1>오늘도 하나씩, 차근차근.</h1><p class="muted">제출한 항목을 누르고 내 번호를 찾아 체크해요.</p></div><div class="summary">제출 항목 <strong>${active.length}</strong>개</div></section><div class="toolbar"><h2>우리 반 제출 현황</h2>${legend()}</div><section class="cards">${active.map(card).join('')||'<div class="panel empty">아직 제출 항목이 없어요.<br>선생님이 항목을 등록하면 여기에 나타나요.</div>'}</section>`;
  $('#app').querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>openCheck(b.dataset.check));
 }
 function card(item){
@@ -125,4 +125,5 @@ async function start(){
  catch(e){$('#mode').textContent='Firebase 연결 실패';$('#app').textContent=`연결하지 못했습니다. 설정과 인터넷 연결을 확인해 주세요. (${e.message})`;}
 }
 start();
+
 
