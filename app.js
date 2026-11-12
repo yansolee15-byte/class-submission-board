@@ -11,8 +11,12 @@ const toast=text=>{$('#notice').textContent=text;clearTimeout(noticeTimer);notic
 const fail=(target,error)=>{target.textContent=error.message||'저장하지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.';};
 function receive(next){data=next;ready=true;render();}
 function render(){
+ const adminScreen=location.hash==='#admin';
+ const headerLink=$('.teacher-link');
+ headerLink.textContent=adminScreen?'제출 현황판':'교사 관리 ↗';
+ headerLink.setAttribute('href',adminScreen?'#board':'#admin');
  if(!ready)return;
- if(location.hash==='#admin'){renderAdmin();return;}
+ if(adminScreen){renderAdmin();return;}
  const active=data.items.filter(i=>!i.archived);
  $('#app').innerHTML=`<section class="intro"><div><h1>오늘도 하나씩, 차근차근.</h1><p class="muted">제출한 항목을 누르고 내 번호를 찾아 체크해요.</p></div><div class="summary">제출 항목 <strong>${active.length}</strong>개</div></section><div class="toolbar"><h2>우리 반 제출 현황</h2>${legend()}</div><section class="cards">${active.map(card).join('')||'<div class="panel empty">아직 제출 항목이 없어요.<br>선생님이 항목을 등록하면 여기에 나타나요.</div>'}</section>`;
  $('#app').querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>openCheck(b.dataset.check));
@@ -124,6 +128,7 @@ async function start(){
  try{const {createFirebaseStore}=await import('./firebase-store.js');store=await createFirebaseStore(firebaseConfig,teacherUid,receive,value=>{teacher=value;if(store){store.subscribe(teacher);render();}},error=>{$('#mode').textContent='연결 오류 · 화면이 최신 상태가 아닐 수 있습니다';toast(error.message);});store.subscribe(teacher);$('#mode').textContent='';}
  catch(e){$('#mode').textContent='Firebase 연결 실패';$('#app').textContent=`연결하지 못했습니다. 설정과 인터넷 연결을 확인해 주세요. (${e.message})`;}
 }
+render();
 start();
 
 
